@@ -51,7 +51,9 @@ class Game:
     def update(self):
         user_input = pygame.key.get_pressed()
         self.player.update(user_input)
-        self.obstacle_manager.update(self.game_speed)
+        self.obstacle_manager.update(self.game_speed, self.player)
+        if not self.player.dino_live:
+            self.playing = False
 
     def draw(self):
         self.clock.tick(FPS)
