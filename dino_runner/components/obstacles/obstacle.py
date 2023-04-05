@@ -10,7 +10,8 @@ class Obstacle:
     def update(self, game_speed, player):
         self.rect.x -= game_speed
         if self.rect.colliderect(player.dino_rect):
-            player.dino_live = False
+            if not player.shield:
+                player.dino_live = False
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)

@@ -1,7 +1,6 @@
 from dino_runner.components.obstacles.obstacle import Obstacle
 from dino_runner.utils.constants import BIRD
 from random import choice
-from pygame.time import delay
 
 
 class Bird(Obstacle):
@@ -21,8 +20,8 @@ class Bird(Obstacle):
         self.rect.y = self.min_pos_y + (self.rect.x * 0.1) - (self.rect.x**2 * 0.0003)
         # Collision
         if self.rect.colliderect(player.dino_rect):
-            player.dino_live = False
-            delay(1000)
+            if not player.shield:
+                player.dino_live = False
         # Change image
         self.image = BIRD[0] if self.step_index < 5 else BIRD[1]
 
