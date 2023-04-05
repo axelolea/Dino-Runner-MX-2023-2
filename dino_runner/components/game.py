@@ -41,6 +41,7 @@ class Game:
             self.events()
             self.update()
             self.draw()
+        pygame.time.delay(2000)
         pygame.quit()
 
     def events(self):
@@ -50,8 +51,8 @@ class Game:
 
     def update(self):
         user_input = pygame.key.get_pressed()
-        self.player.update(user_input)
         self.obstacle_manager.update(self.game_speed, self.player)
+        self.player.update(user_input)
         if not self.player.dino_live:
             self.playing = False
 

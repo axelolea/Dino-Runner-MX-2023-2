@@ -1,5 +1,4 @@
 from dino_runner.utils.constants import SCREEN_WIDTH
-from pygame.time import delay
 
 
 class Obstacle:
@@ -12,7 +11,6 @@ class Obstacle:
         self.rect.x -= game_speed
         if self.rect.colliderect(player.dino_rect):
             player.dino_live = False
-            delay(300)
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)

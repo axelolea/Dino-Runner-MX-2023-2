@@ -11,6 +11,8 @@ IMG_DIR = os.path.join(os.path.dirname(__file__), "..", "assets")
 # Assets Constants
 ICON = image.load(os.path.join(IMG_DIR, "DinoWallpaper.png"))
 
+DEAD = image.load(os.path.join(IMG_DIR, 'Dino/DinoDead.png'))
+
 RUNNING = [
     image.load(os.path.join(IMG_DIR, "Dino/DinoRun1.png")),
     image.load(os.path.join(IMG_DIR, "Dino/DinoRun2.png")),
