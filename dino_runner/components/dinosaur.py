@@ -51,6 +51,7 @@ class Dinosaur:
         self.jump_vel = self.JUMP_VEL
         self.dino_live = True
         self.shield = False
+        self.hammer = False
         self.time_up_power_up = 0
 
     def update(self, user_input) -> None:
@@ -82,6 +83,14 @@ class Dinosaur:
             self.step_index = 0
 
         if self.shield:
+            time_show = round(
+                (self.time_up_power_up - get_ticks()) / 1000,
+                2
+            )
+            if time_show < 0:
+                self.reset()
+
+        elif self.hammer:
             time_show = round(
                 (self.time_up_power_up - get_ticks()) / 1000,
                 2
@@ -122,6 +131,10 @@ class Dinosaur:
         if power_up.type == SHIELD_TYPE:
             self.type = SHIELD_TYPE
             self.shield = True
+            self.time_up_power_up = power_up.time_up
+        if power_up.type == HAMMER_TYPE:
+            self.type = HAMMER_TYPE
+            self.hammer = True
             self.time_up_power_up = power_up.time_up
 
     def reset(self):

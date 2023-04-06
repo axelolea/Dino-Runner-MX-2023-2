@@ -12,6 +12,7 @@ from dino_runner.utils.constants import (
 from dino_runner.components.dinosaur import Dinosaur
 from dino_runner.components.power_up.power_up_manager import PowerUpManager
 from dino_runner.components.obstacles.obstacle_manager import ObstacleManager
+from dino_runner.components.text_utils import get_message
 
 
 class Game:
@@ -24,7 +25,9 @@ class Game:
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.clock = pygame.time.Clock()
         self.playing = False
+        self.running = False
         self.points = 0
+        self.death = 0
         self.game_speed = 20
         self.percentage_cloud_speed = 0.3
         self.y_pos_bg = 380
@@ -38,36 +41,50 @@ class Game:
 
     def run(self):
         # Game loop: events - update - draw
-        self.playing = True
-        while self.playing:
+        self.running = True
+        while self.running:
             self.events()
             self.update()
             self.draw()
-        pygame.time.delay(2000)
         pygame.quit()
 
     def events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                self.playing = False
+                self.running = False
+            if event.type == pygame.KEYDOWN and not self.playing:
+                self.playing = True
+                self.reset()
 
     def update(self):
+        if not self.playing:
+            return
         self.points += 1
+        if self.points % 200 == 0:
+            self.game_speed += 1
         user_input = pygame.key.get_pressed()
         self.obstacle_manager.update(self.game_speed, self.player)
         self.power_up_manager.update(self.game_speed, self.points, self.player)
         self.player.update(user_input)
         if not self.player.dino_live:
             self.playing = False
+            self.death += 1
 
     def draw(self):
-        self.clock.tick(FPS)
-        self.screen.fill((255, 255, 255))
-        self.draw_background()
-        self.draw_clouds()
-        self.player.draw(self.screen)
-        self.obstacle_manager.draw(self.screen)
-        self.power_up_manager.draw(self.screen)
+        if self.playing:
+            self.clock.tick(FPS)
+            self.screen.fill((255, 255, 255))
+            self.draw_background()
+            self.draw_clouds()
+            self.player.draw(self.screen)
+            self.obstacle_manager.draw(self.screen)
+            self.power_up_manager.draw(self.screen)
+            self.draw_score()
+        else:
+            self.draw_menu()
+
+        if not self.player.dino_live:
+            self.player.draw(self.screen)
         pygame.display.update()
         pygame.display.flip()
 
@@ -89,3 +106,26 @@ class Game:
             actual_pos = cloud['pos_x'] + image_width
             if actual_pos < 0:
                 cloud['pos_x'] += SCREEN_WIDTH + image_width
+
+    def draw_score(self):
+        score, score_rect = get_message(f'Points: {self.points}', 20, 1000, 40)
+        self.screen.blit(score, score_rect)
+
+    def draw_menu(self):
+        white_color = (255, 255, 255)
+        self.screen.fill(white_color)
+        if self.death == 0:
+            text, text_rect = get_message('Press any Key to Start', 40)
+            self.screen.blit(text, text_rect)
+        else:
+            text, text_rect = get_message('Press any Key to Restart', 40)
+            score, score_rect = get_message(f'Points: {self.points}', 20, height=SCREEN_HEIGHT // 2 + 50)
+            self.screen.blit(score, score_rect)
+            self.screen.blit(text, text_rect)
+
+    def reset(self):
+        self.game_speed = 20
+        self.player = Dinosaur()
+        self.power_up_manager = PowerUpManager()
+        self.obstacle_manager = ObstacleManager()
+        self.points = 0
