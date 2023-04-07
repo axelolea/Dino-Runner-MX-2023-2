@@ -53,8 +53,16 @@ class Dinosaur:
         self.shield = False
         self.hammer = False
         self.time_up_power_up = 0
+        self.counts = {
+            'jumps': 0,
+            'obstacles_jump': 0,
+            'obstacles_destroy': 0,
+            'shields': 0,
+            'hammers': 0
+        }
 
     def update(self, user_input) -> None:
+
         if not self.dino_live:
             self.image = DEAD
         elif self.dino_jump:
@@ -72,6 +80,7 @@ class Dinosaur:
             self.dino_run = False
             self.dino_duck = False
             self.dino_jump = True
+            self.counts['jumps'] += 1
         elif user_input[K_DOWN] and self.dino_jump:
             self.jump_vel -= 1.5
         elif not self.dino_jump:
@@ -89,7 +98,6 @@ class Dinosaur:
             )
             if time_show < 0:
                 self.reset()
-
         elif self.hammer:
             time_show = round(
                 (self.time_up_power_up - get_ticks()) / 1000,
@@ -132,12 +140,15 @@ class Dinosaur:
             self.type = SHIELD_TYPE
             self.shield = True
             self.time_up_power_up = power_up.time_up
+            self.counts['shields'] += 1
         if power_up.type == HAMMER_TYPE:
             self.type = HAMMER_TYPE
             self.hammer = True
             self.time_up_power_up = power_up.time_up
+            self.counts['hammers'] += 1
 
     def reset(self):
         self.type = DEFAULT_TYPE
         self.shield = False
+        self.hammer = False
         self.time_up_power_up = 0

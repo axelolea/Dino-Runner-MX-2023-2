@@ -4,7 +4,7 @@ from random import randint
 
 
 class PowerUpManager:
-    POINTS = 200
+    POINTS = 100
     power_ups: list[Shield | Hammer]
 
     def __init__(self):
@@ -12,7 +12,7 @@ class PowerUpManager:
 
     def update(self, game_speed, points, player):
         if len(self.power_ups) == 0 and points % self.POINTS == 0:
-            value = randint(0, 1)
+            value = randint(0, 1)           
             if value == 0:
                 self.power_ups.append(Hammer())
             else:

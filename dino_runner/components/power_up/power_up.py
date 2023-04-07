@@ -6,9 +6,9 @@ class PowerUp:
     POS_Y = 325
     POWER_UP_DURATION = 5000
 
-    def __init__(self, image, type):
+    def __init__(self, image, type_power_up):
         self.image = image
-        self.type = type
+        self.type = type_power_up
         self.rect = self.image.get_rect()
         self.rect.x = SCREEN_WIDTH
         self.rect.y = self.POS_Y

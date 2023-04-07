@@ -63,14 +63,32 @@ BIRD = [
     image.load(os.path.join(IMG_DIR, 'Bird/Bird2.png')),
 ]
 
-CLOUD = image.load(os.path.join(IMG_DIR, 'Other/Cloud.png'))
 SHIELD = image.load(os.path.join(IMG_DIR, 'Other/shield.png'))
 HAMMER = image.load(os.path.join(IMG_DIR, 'Other/hammer.png'))
 
+# Background Scene
+
+CLOUD = image.load(os.path.join(IMG_DIR, 'Other/Cloud.png'))
+
 BG = image.load(os.path.join(IMG_DIR, 'Other/Track.png'))
+BG_1 = image.load(os.path.join(IMG_DIR, 'Other/DinoBackground1.png'))
+BG_2 = image.load(os.path.join(IMG_DIR, 'Other/DinoBackground2.png'))
 
 HEART = image.load(os.path.join(IMG_DIR, 'Other/SmallHeart.png'))
 
 DEFAULT_TYPE = 'default'
 SHIELD_TYPE = 'shield'
 HAMMER_TYPE = 'hammer'
+
+DATA_SAVE = './data.json'
+
+DEFAULT_STATS = {
+    'best_score': 0,
+    'total_points': 0,
+    'jumps': 0,
+    'obstacles_jump': 0,
+    'obstacles_destroy': 0,
+    'dead': 0,
+    'shields': 0,
+    'hammers': 0
+}
