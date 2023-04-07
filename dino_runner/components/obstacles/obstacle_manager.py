@@ -11,6 +11,7 @@ class ObstacleManager:
     def __init__(self) -> None:
         self.obstacles = list()
         self.counts = self.COUNTS
+        self.hammer_state = False
         self.obstacles.append(Cactus())
 
     def update(self, game_speed, player, user_input):
@@ -25,16 +26,23 @@ class ObstacleManager:
                 player.counts['obstacles_jump'] += 1
                 self.obstacles.pop()
 
-            if user_input[K_SPACE] and player.hammer:
-                if self.counts >= 0:
+            if user_input[K_SPACE] and player.hammer and not self.hammer_state:
+                if self.counts > 0:
                     value_a1 = player.dino_rect.y
                     value_a2 = player.dino_rect.y + player.dino_rect.height
                     value_b1 = obstacle.rect.y
                     value_b2 = obstacle.rect.y + obstacle.rect.height
                     self.counts -= 1
+                    self.hammer_state = True
                     if value_b1 in range(value_a1, value_a2) or value_b2 in range(value_a1, value_a2):
                         self.obstacles.pop()
                         player.counts['obstacles_destroy'] += 1
+
+            if self.counts <= 0 and player.hammer:
+                player.reset()
+
+            if not user_input[K_SPACE] and self.hammer_state:
+                self.hammer_state = False
 
             if not player.hammer:
                 self.counts = self.COUNTS
